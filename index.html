@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>А знаю ли я про белую смерть?</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #dbeafe, #fce7f3);
+      color: #111827;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .quiz-container {
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px;
+      margin-top: 50px;
+      width: 90%;
+      max-width: 600px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #1d4ed8;
+    }
+
+    .question {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    .options button {
+      display: block;
+      margin: 10px 0;
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background-color: #93c5fd;
+      color: #1e3a8a;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .options button:hover {
+      background-color: #60a5fa;
+    }
+
+    .result {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .restart {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #f87171;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .restart:hover {
+      background-color: #ef4444;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>А знаю ли я про белую смерть?</h1>
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="options" id="options"></div>
+    </div>
+    <div class="result" id="result"></div>
+    <button class="restart" onclick="location.reload()" style="display:none;">Пройти снова</button>
+  </div>
+
+  <script>
+    const questions = [
+      { q: 'Что означает термин "белая смерть"?', a: 'Наркотики, особенно кокаин и героин', o: ['Снежная буря', 'Сахар', 'Наркотики, особенно кокаин и героин', 'Простуда'] },
+      { q: 'Как наркотики влияют на мозг подростка?', a: 'Разрушают нейроны и ухудшают память', o: ['Улучшают настроение навсегда', 'Разрушают нейроны и ухудшают память', 'Не влияют', 'Ускоряют обучение'] },
+      { q: 'Что из этого является последствием употребления наркотиков?', a: 'Все перечисленное', o: ['Проблемы с учебой', 'Зависимость', 'Конфликты в семье', 'Все перечисленное'] },
+      { q: 'Могут ли наркотики вызвать зависимость с первого раза?', a: 'Да', o: ['Нет', 'Только у взрослых', 'Да', 'Зависит от человека'] },
+      { q: 'Какой способ — лучший способ сказать "нет" наркотикам?', a: 'Уверенно отказаться', o: ['Игнорировать', 'Придумать отговорку', 'Уверенно отказаться', 'Молчать'] },
+      { q: 'Можно ли доверять информации о наркотиках в соцсетях?', a: 'Не всегда', o: ['Да, всегда', 'Не всегда', 'Только от друзей', 'Если с мемами'] },
+      { q: 'Какие чувства часто испытывают наркозависимые?', a: 'Одиночество и тревогу', o: ['Радость и уверенность', 'Одиночество и тревогу', 'Спокойствие', 'Сонливость'] },
+      { q: 'Какие органы больше всего страдают от наркотиков?', a: 'Мозг, сердце, печень', o: ['Пальцы', 'Кожа', 'Глаза', 'Мозг, сердце, печень'] },
+      { q: 'Какая организация может помочь при зависимости?', a: 'Наркологическая служба', o: ['Библиотека', 'Наркологическая служба', 'Магазин здоровья', 'ГИБДД'] },
+      { q: 'Что важно помнить о "друзьях", предлагающих наркотики?', a: 'Это не настоящие друзья', o: ['Они заботятся о тебе', 'Это не настоящие друзья', 'Их можно переубедить', 'Лучше быть с ними'] },
+      { q: 'Можно ли бросить наркотики без помощи?', a: 'Трудно, но с поддержкой возможно', o: ['Нет', 'Да, легко', 'Трудно, но с поддержкой возможно', 'Не стоит пробовать'] },
+      { q: 'Какие занятия помогают сказать "нет" наркотикам?', a: 'Спорт и хобби', o: ['Ничего', 'Игры и соцсети', 'Сон и еда', 'Спорт и хобби'] },
+      { q: 'Кто может поддержать подростка в трудную минуту?', a: 'Семья и учителя', o: ['Только интернет', 'Семья и учителя', 'Незнакомцы', 'Никто'] },
+      { q: 'Что важно знать о наркопреступности?', a: 'Она разрушает жизни', o: ['Она безобидна', 'Она разрушает жизни', 'Она полезна', 'О ней лучше молчать'] },
+      { q: 'Почему важно быть информированным о наркотиках?', a: 'Чтобы сделать правильный выбор', o: ['Чтоб быть модным', 'Чтобы удивить друзей', 'Чтобы сделать правильный выбор', 'Чтобы попробовать'] },
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[current];
+      document.getElementById('question').innerText = q.q;
+      const opts = q.o.map(opt => `<button onclick="selectAnswer('${opt}')">${opt}</button>`).join('');
+      document.getElementById('options').innerHTML = opts;
+    }
+
+    function selectAnswer(answer) {
+      if (answer === questions[current].a) score++;
+      current++;
+      if (current < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let resultText = '';
+      if (score === questions.length) {
+        resultText = 'Вы отлично осведомлены о вреде наркотиков. Так держать!';
+      } else if (score > questions.length / 2) {
+        resultText = 'Вы хорошо информированы, но стоит узнать еще больше!';
+      } else {
+        resultText = 'Стоит больше узнать о вреде наркотиков. Это важно для вашего будущего!';
+      }
+      document.getElementById('quiz').style.display = 'none';
+      document.getElementById('result').innerText = `Ваш результат: ${score} из ${questions.length}.\n${resultText}`;
+      document.querySelector('.restart').style.display = 'block';
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
